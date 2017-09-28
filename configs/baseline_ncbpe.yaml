@@ -1,0 +1,70 @@
+model: nmt
+mode: train
+output_dir: nmt/models/multi30k_joint_40kbpe_
+model_name: baseline_ncbpe
+reload: False
+
+# Data
+src_train: nmt/data/joint_40kbpe/wmt_task1/train.en.norm.tok.lower.bpe
+trg_train: nmt/data/joint_40kbpe/wmt_task1/train.de.norm.tok.lower.bpe
+src_valid: nmt/data/joint_40kbpe/wmt_task1/dev.en.norm.tok.lower.bpe
+trg_valid: nmt/data/joint_40kbpe/wmt_task1/dev.de.norm.tok.lower.bpe
+src_dicts: [nmt/data/joint_40kbpe/wmt_task1/joint.en.norm.tok.lower.bpe.json]
+trg_dicts: [nmt/data/joint_40kbpe/wmt_task1/joint.de.norm.tok.lower.bpe.json]
+n_words_src: 22211
+n_words_trg: 30475
+eos_symbol: </s>
+unk_symbol: <UNK>
+
+# Model hyperparameters
+decoder: gru
+disable_attention: False
+dim_emb: 620
+dim_per_factor: [620]
+factors: 1
+factors_trg: 1
+dim: 1000
+dim_att: 2000
+dropout: True
+dropout_src: 0.0
+dropout_emb: 0.2
+dropout_rec: 0.2
+dropout_hid: 0.0
+beam_size: 12
+
+# Training hyperparameters
+batch_size: 80
+sort_k_batches: 3
+maxlen: 120
+max_epochs: 100
+optimizer: adam
+learning_rate: 1e-4
+decay_c: 0.
+clip_c: 1.
+alpha_c: 0.
+early_stopping: bleu
+patience: 5
+subword_at_replace: True
+at_replace: False
+bleu_val_out: validation
+bleu_val_burnin: 7500
+bleu_val_ref: nmt/data/wmt_task1/dev.de.gold
+bleu_script: nmt/nmt/multi-bleu.perl
+postprocess_script: "cat"
+save_frequency: -1
+validation_frequency: -1
+sample_frequency: -1
+finish_after: 100000
+track_n_models: 3
+reload: False
+
+# Feedback
+display_frequency: 100
+verbose: null
+disp_alignments: False
+
+# Multi-tasking
+mtl: False
+mtl_ratio: [0.5, 0.5]
+mtl_configs: ['nmt/configs/nc.yaml']
+n_shared_layers: 1

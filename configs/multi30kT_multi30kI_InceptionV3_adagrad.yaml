@@ -1,0 +1,69 @@
+model: nmt
+mode: train
+output_dir: nmt/models/adagrad_multi30kT_multi30kI_InceptionV3_
+model_name: baseline_yaml
+
+# Data
+src_train: nmt/data/wmt_task1/train.en
+trg_train: nmt/data/wmt_task1/train.de
+src_valid: nmt/data/wmt_task1/dev.en
+trg_valid: nmt/data/wmt_task1/dev.de
+src_dicts: [nmt/data/wmt_task1/en_dict.json]
+trg_dicts: [nmt/data/wmt_task1/de_dict.json]
+n_words_src: 10214
+n_words_trg: 16022
+eos_symbol: </s>
+unk_symbol: <UNK>
+
+# Model hyperparameters
+decoder: gru
+disable_attention: False
+dim_emb: 620
+dim_per_factor: [620]
+factors: 1
+factors_trg: 1
+dim: 1000
+dim_att: 2000
+dropout: True
+dropout_src: 0.0
+dropout_emb: 0.2
+dropout_rec: 0.2
+dropout_hid: 0.0
+beam_size: 12
+
+# Training hyperparameters
+batch_size: 80
+sort_k_batches: 3
+maxlen: 50
+max_epochs: 100
+optimizer: adagrad
+learning_rate: 0.01
+decay_c: 0.
+clip_c: 1.
+alpha_c: 0.
+early_stopping: bleu
+patience: 5
+subword_at_replace: False
+at_replace: True
+bleu_val_out: validation
+bleu_val_burnin: 3000
+bleu_val_ref: nmt/data/wmt_task1/dev.de.gold
+bleu_script: nmt/nmt/multi-bleu.perl
+postprocess_script: "cat"
+save_frequency: -1
+validation_frequency: -1
+sample_frequency: -1
+finish_after: 100000
+track_n_models: 3
+reload: False
+
+# Feedback
+display_frequency: 100
+verbose: null
+disp_alignments: False
+
+# Multi-tasking
+mtl: True
+mtl_ratio: [0.5, 0.5]
+mtl_configs: ['imaginet/configs/adagrad.multi30k.inceptionv3.yaml']
+n_shared_layers: 1

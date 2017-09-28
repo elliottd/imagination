@@ -1,0 +1,69 @@
+model: nmt
+mode: train
+output_dir: nmt/models/nc_decomp_
+model_name: nc_baseline
+reload: False
+
+# Data
+src_train: nmt/data/news_commentary/news-commentary-v11.de-en.clean.en.norm.tok.lower.decomp
+trg_train: nmt/data/news_commentary/news-commentary-v11.de-en.clean.de.norm.tok.lower.decomp
+src_valid: nmt/data/news_commentary/newstest2013.en.norm.tok.lower.decomp
+trg_valid: nmt/data/news_commentary/newstest2013.de.norm.tok.lower.decomp
+src_dicts: [nmt/data/news_commentary/news-commentary-v11.de-en.clean.en.norm.tok.lower.decomp.json]
+trg_dicts: [nmt/data/news_commentary/news-commentary-v11.de-en.clean.de.norm.tok.lower.decomp.json]
+n_words_src: 30000
+n_words_trg: 30000
+eos_symbol: </s>
+unk_symbol: <UNK>
+
+# Model hyperparameters
+decoder: gru
+disable_attention: False
+dim_emb: 620
+dim_per_factor: [620]
+factors: 1
+factors_trg: 1
+dim: 1000
+dim_att: 2000
+dropout: True
+dropout_src: 0.0
+dropout_emb: 0.2
+dropout_rec: 0.2
+dropout_hid: 0.0
+beam_size: 12
+
+# Training hyperparameters
+batch_size: 80
+sort_k_batches: 3
+maxlen: 70
+max_epochs: 100
+optimizer: adam
+learning_rate: 1e-4
+decay_c: 0.
+clip_c: 1.
+alpha_c: 0.
+early_stopping: bleu
+patience: 5
+subword_at_replace: True
+at_replace: False
+bleu_val_out: validation
+bleu_val_burnin: 100000
+bleu_val_ref: nmt/data/news_commentary/newstest2013.de.norm.tok.lower
+bleu_script: nmt/nmt/multi-bleu.perl
+postprocess_script: "cat"
+save_frequency: -1
+validation_frequency: -1
+sample_frequency: -1
+finish_after: 1000000
+track_n_models: 3
+
+# Feedback
+display_frequency: 100
+verbose: null
+disp_alignments: False
+
+# Multi-tasking
+mtl: False
+mtl_ratio: [0.5, 0.5]
+mtl_configs: ['bpe.multi30k.inceptionv3.yaml']
+n_shared_layers: 1

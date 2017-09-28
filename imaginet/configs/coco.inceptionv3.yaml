@@ -1,0 +1,59 @@
+model_name: coco-inceptionv3-w620-h1000-meanmlp-tanh-constrastive0.1-adam-5e-5-dropout_hid0.3-decay_c1e-8-alltoks # the name of the file in which we'll save the weights
+config_name: coco.inceptionv3.yaml # the name of the configuration file
+output_dir: imaginet/checkpoints/ # where to save the model weights
+word_vocabulary: imaginet/data/coco/en_dict.json # where is the vocabulary file?
+mode: imaginet
+model: imaginet
+
+# input data for text files, image vectors, and wordsims
+train: imaginet/data/coco/train.pkl
+fc7_train: imaginet/data/coco/train_inceptionv3.hdf5
+val: imaginet/data/coco/dev.pkl
+fc7_val: imaginet/data/coco/dev_inceptionv3.hdf5
+sim_file: imaginet/data/simlex-999/EN-SimLex-999.txt
+
+# text data
+eos_symbol: '</s>'        # end of sentence symbol
+unk_symbol: '<UNK>'       # unknown word symbol
+max_words: -1             # UNK replace words beyond here
+max_unk_ratio: 0.1        # maximum acceptable unkyness of an instance
+
+# model hyperparameters
+dim: 1000
+dim_emb: 620
+dim_per_factor: [620]
+dim_v: 2048
+encoder_layers: 1         # if you want a deep RNN
+learn_rnn_init: True     # if you want to learn the initial state of the RNN
+init: ortho
+final_birnn: False
+mean_birnn: True
+
+# dropout
+dropout: True             # True or False (True => tag.test_value will break)
+dropout_word: 0.0         # dropout whole words
+dropout_emb: 0.2          # dropout parts of the embeddings
+dropout_rec: 0.2          # dropout recurrent connections
+dropout_hid: 0.0          # dropout on hidden to output states (in the MLP)
+
+# MLP
+activation_mlp: tanh      # relu or tanh activation
+
+# training
+loss: constrastive
+margin: 0.1
+batch_size: 80
+num_epochs: 100
+optimizer: adam
+lr: 0.0001
+clip_c: 1.0              # clip gradients at this value
+decay_c: 0.              # L2 regularisation term
+verbose: False
+compute_test_values: 'off'    # 'warn' turns it on
+validation_frequency: -1
+display_frequency: 100
+reload: False
+
+early_stopping: medr     # medr or corr
+patience: 5              # number of epochs to delay early stopping
+ranking_k: 5             # number of possibly relevant matches when ranking

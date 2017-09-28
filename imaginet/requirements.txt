@@ -1,0 +1,4 @@
+theano==0.9.0
+future
+tables
+sklearn
